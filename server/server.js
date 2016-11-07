@@ -5,6 +5,7 @@ const getLogger = require('./utilities/logger');
 const logger = getLogger();
 const webpack = require('webpack');
 const config = require('../webpack.config.js');
+const zipCodeController = require('./controllers/zipCodeController');
 
 let server;
 
@@ -25,9 +26,7 @@ module.exports = {
 
     app.use(express.static(__dirname + '/public'));
 
-    app.get('/zipCode', function (req, res) {
-      res.sendStatus(200)
-    });
+    app.get('/zipCode', zipCodeController);
 
     app.use(function (req, res) {
       res.render('index.html', function(err, html) {
