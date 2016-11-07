@@ -4,8 +4,28 @@ const gulp = require('gulp');
 const jasmineBrowser = require('gulp-jasmine-browser');
 const webpack = require('webpack-stream');
 const webpackTestConfig = require('./spec/webpack.test.config');
+const webpackConfig = require('./webpack.config');
 const plumber = require('gulp-plumber');
 const gutil = require('gulp-util');
+const nodemon = require('nodemon');
+
+gulp.task('serverWatch', function () {
+  nodemon({
+    script: './server/app.js',
+    ext: '.js',
+    ignore: ['client/', 'public/']
+  });
+});
+
+gulp.task('webpackWatch', function () {
+  return bundleAssets(webpackConfig, {watch: true})
+    .pipe(gulp.dest('public/'));
+});
+
+gulp.task('runDev', [
+  'webpackWatch',
+  'serverWatch'
+]);
 
 gulp.task('jasmine', function () {
   process.env.NODE_ENV = 'test';
@@ -32,4 +52,11 @@ function bundleUnitTestAssets (options, shouldKillProcess) {
         process.exit(1);
       }
     });
+}
+
+function bundleAssets(config, options) {
+  options = options || {};
+  return gulp.src('./client/main.js')
+    .pipe(plumber())
+    .pipe(webpack(Object.assign(config, options)));
 }

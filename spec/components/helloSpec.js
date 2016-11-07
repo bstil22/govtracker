@@ -1,4 +1,4 @@
-import Hello from '../../src/components/hello'
+import Hello from '../../client/components/hello'
 
 describe('Hello', function () {
   it('should render an h1', function () {
