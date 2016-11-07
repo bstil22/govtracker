@@ -1,4 +1,4 @@
-import World from '../../client/components/world'
+import World from '../../../client/components/world'
 
 describe('World', function () {
   it('should render an h1', function () {

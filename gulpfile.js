@@ -1,7 +1,11 @@
 require('babel-polyfill');
 
+const path = require('path');
 const gulp = require('gulp');
 const jasmineBrowser = require('gulp-jasmine-browser');
+const jasmine = require('gulp-jasmine');
+const runSequence = require('run-sequence');
+const TerminalReporter = require('jasmine-terminal-reporter');
 const webpack = require('webpack-stream');
 const webpackTestConfig = require('./spec/webpack.test.config');
 const webpackConfig = require('./webpack.config');
@@ -9,9 +13,21 @@ const plumber = require('gulp-plumber');
 const gutil = require('gulp-util');
 const nodemon = require('nodemon');
 
+const terminalReporter = new TerminalReporter({
+  showColors: true,
+  includeStackTrace: true,
+  stackFilter: function (stack) {
+    const jasmineCorePath = require.resolve('jasmine-core').split(path.sep).slice(0, -1).join(path.sep);
+    const superTestPath = require.resolve('supertest').split(path.sep).slice(0, -1).join(path.sep);
+    return stack.split('\n').filter(function (stackLine) {
+      return (stackLine.indexOf(jasmineCorePath) === -1 && stackLine.indexOf(superTestPath) === -1)
+    }).join('\n');
+  }
+});
+
 gulp.task('serverWatch', function () {
   nodemon({
-    script: './server/app.js',
+    script: './server/utilities/runServer.js',
     ext: '.js',
     ignore: ['client/', 'public/']
   });
@@ -41,9 +57,19 @@ gulp.task('unitSpecs', function () {
     .pipe(jasmineBrowser.headless());
 });
 
+gulp.task('serverSpecs', function () {
+  process.env.NODE_ENV = 'test';
+  return gulp.src('spec/server/**/*Spec.js')
+    .pipe(jasmine({reporter: terminalReporter}));
+});
+
+gulp.task('specs', function () {
+  runSequence('unitSpecs', 'serverSpecs');
+});
+
 function bundleUnitTestAssets (options, shouldKillProcess) {
   options = options || {};
-  return gulp.src(['./spec/support/specHelper.js', './spec/**/*Spec.js'])
+  return gulp.src(['./spec/support/specHelper.js', './spec/client/**/*Spec.js'])
     .pipe(plumber())
     .pipe(webpack(Object.assign(webpackTestConfig, options)))
     .on('error', function (err) {
@@ -58,5 +84,8 @@ function bundleAssets(config, options) {
   options = options || {};
   return gulp.src('./client/main.js')
     .pipe(plumber())
-    .pipe(webpack(Object.assign(config, options)));
+    .pipe(webpack(Object.assign(config, options)))
+    .on('error', function (err) {
+      gutil.log(gutil.colors.red('Bundling test assets failed'), gutil.colors.red(err));
+    });
 }
