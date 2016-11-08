@@ -17,7 +17,9 @@ describe('Server', function () {
         this.response = request('http://127.0.0.1:' + this.port)
           .get('/zipCode');
         this.response.expect(function (res) {
-          expect(res.status).toBe(200)
+          expect(res.status).toBe(200);
+          expect(res.body).toMatch(/bioguide_id\":\"J000294\"/);
+          expect(res.headers['content-type']).toMatch(/application\/json/)
         }).end(function (err) {
           if (err) {
             done.fail(err);

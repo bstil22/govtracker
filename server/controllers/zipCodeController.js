@@ -3,7 +3,7 @@ const request = require('request-promise');
 module.exports = (req, res) => {
   return getDelegates()
     .then(legislators => {
-      res.status(200).send({legislators})
+      res.status(200).json(legislators)
     })
     .catch(() => {
       res.status(200).send('Sunlight Labs is hosed');
