@@ -1,0 +1,64 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "indent": [
+      2,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "quotes": [
+      2,
+      "single"
+    ],
+    "linebreak-style": [
+      2,
+      "unix"
+    ],
+    "prefer-const": 2,
+    "semi": [
+      2,
+      "always"
+    ],
+    "no-console": 0,
+    "no-unused-vars": [
+      2,
+      { "varsIgnorePattern": "React" }
+    ],
+    "react/jsx-uses-vars": [2]
+  },
+  "globals": {
+    "beforeEach": false,
+    "beforeAll": false,
+    "describe": false,
+    "it": false,
+    "xit": false,
+    "afterEach": false,
+    "afterAll": false,
+    "expect": false,
+    "spyOn": false,
+    "done": false,
+    "fail": false,
+    "React":false,
+    "ReactDOM":false,
+    "TestUtils":false,
+    "$": false,
+    "browser": false,
+    "jasmine": false
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true
+  },
+  "extends": "eslint:recommended",
+  "ecmaFeatures": {
+    "jsx": true,
+    "experimentalObjectRestSpread": true,
+    "modules": true
+  },
+  "plugins": [
+    "react"
+  ]
+}

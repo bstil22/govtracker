@@ -13,39 +13,39 @@ describe('Server', function () {
   });
 
   describe('GET /zipCode', function () {
-      it('returns a 200', function (done) {
-        this.response = request('http://127.0.0.1:' + this.port)
-          .get('/zipCode');
-        this.response.expect(function (res) {
-          expect(res.status).toBe(200);
-          expect(res.body).toMatch(/bioguide_id\":\"J000294\"/);
-          expect(res.headers['content-type']).toMatch(/application\/json/)
-        }).end(function (err) {
-          if (err) {
-            done.fail(err);
-          } else {
-            done();
-          }
-        });
+    it('returns a 200', function (done) {
+      this.response = request('http://127.0.0.1:' + this.port)
+        .get('/zipCode');
+      this.response.expect(function (res) {
+        expect(res.status).toBe(200);
+        expect(res.body).toMatch(/bioguide_id\":\"J000294\"/);
+        expect(res.headers['content-type']).toMatch(/application\/json/);
+      }).end(function (err) {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
+    });
   });
 
   describe('GET /', function () {
-      it('returns a 200', function (done) {
-        this.response = request('http://127.0.0.1:' + this.port)
-          .get('/');
-        this.response.expect(function (res) {
-          expect(res.status).toBe(200);
-          expect(res.headers['content-type']).toMatch(/text\/html/);
-          expect(res.text).toMatch(/<body>/)
-        }).end(function (err) {
-          if (err) {
-            done.fail(err);
-          } else {
-            done();
-          }
-        });
+    it('returns a 200', function (done) {
+      this.response = request('http://127.0.0.1:' + this.port)
+        .get('/');
+      this.response.expect(function (res) {
+        expect(res.status).toBe(200);
+        expect(res.headers['content-type']).toMatch(/text\/html/);
+        expect(res.text).toMatch(/<body>/);
+      }).end(function (err) {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
+    });
   });
 
 });

@@ -1,8 +1,6 @@
-const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const getLogger = require('./utilities/logger');
-const logger = getLogger();
 const webpack = require('webpack');
 const config = require('../webpack.config.js');
 const zipCodeController = require('./controllers/zipCodeController');
@@ -34,12 +32,11 @@ module.exports = {
       });
     });
 
-    return app
+    return app;
   },
 
   start: function (port) {
     const logger = getLogger();
-
     const app = this.getApp();
     return new Promise((resolve) => server = app.listen(port, () => {
       logger.info('Server has started on port: ' + port);

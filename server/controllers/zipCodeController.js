@@ -3,7 +3,7 @@ const request = require('request-promise');
 module.exports = (req, res) => {
   return getDelegates()
     .then(legislators => {
-      res.status(200).json(legislators)
+      res.status(200).json(legislators);
     })
     .catch(() => {
       res.status(200).send('Sunlight Labs is hosed');
@@ -22,7 +22,7 @@ function getDelegates () {
         reject(new Error(`Status code: ${response.statusCode}`));
       }
       else {
-        resolve(response.body)
+        resolve(response.body);
       }
     }).catch(err => {
       reject(err);
