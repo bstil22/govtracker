@@ -13,15 +13,20 @@ const plumber = require('gulp-plumber');
 const gutil = require('gulp-util');
 const nodemon = require('nodemon');
 
+function filterStack (stack) {
+  const jasmineCorePath = require.resolve('jasmine-core').split(path.sep).slice(0, -1).join(path.sep);
+  const superTestPath = require.resolve('supertest').split(path.sep).slice(0, -1).join(path.sep);
+  const superAgentPath = require.resolve('superagent').split(path.sep).slice(0, -1).join(path.sep);
+  return stack.split('\n').filter(function (stackLine) {
+    return stackLine.indexOf(jasmineCorePath) === -1 && stackLine.indexOf(superTestPath) === -1
+      && stackLine.indexOf(superAgentPath) === -1
+  }).join('\n');
+}
 const terminalReporter = new TerminalReporter({
   showColors: true,
   includeStackTrace: true,
   stackFilter: function (stack) {
-    const jasmineCorePath = require.resolve('jasmine-core').split(path.sep).slice(0, -1).join(path.sep);
-    const superTestPath = require.resolve('supertest').split(path.sep).slice(0, -1).join(path.sep);
-    return stack.split('\n').filter(function (stackLine) {
-      return (stackLine.indexOf(jasmineCorePath) === -1 && stackLine.indexOf(superTestPath) === -1)
-    }).join('\n');
+   return filterStack(stack)
   }
 });
 
@@ -64,7 +69,12 @@ gulp.task('serverSpecs', function () {
 });
 
 gulp.task('specs', function () {
-  runSequence('unitSpecs', 'serverSpecs');
+  runSequence('unitSpecs', 'serverSpecs', function (err) {
+    // avoids the cluttering error runSequence throws
+    if (err) {
+      process.exit(1)
+    }
+  });
 });
 
 function bundleUnitTestAssets (options, shouldKillProcess) {
