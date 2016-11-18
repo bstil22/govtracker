@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const getLogger = require('./utilities/logger');
 const webpack = require('webpack');
 const config = require('../webpack.config.js');
-const zipCodeController = require('./controllers/zipCodeController');
+const legislatorsController = require('./controllers/legislatorsController');
 
 let server;
 
@@ -24,7 +24,7 @@ module.exports = {
 
     app.use(express.static(__dirname + '/public'));
 
-    app.get('/zipCode', zipCodeController);
+    app.get('/legislators*', legislatorsController);
 
     app.use(function (req, res) {
       res.render('index.html', function(err, html) {

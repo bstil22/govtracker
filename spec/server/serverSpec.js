@@ -12,13 +12,13 @@ describe('Server', function () {
     server.stop().then(done);
   });
 
-  describe('GET /zipCode', function () {
-    it('returns a 200', function (done) {
+  describe('GET /legislators', function () {
+    it('returns a 200 with legislators', function (done) {
       this.response = request('http://127.0.0.1:' + this.port)
-        .get('/zipCode');
+        .get('/legislators?zipCode=82001');
       this.response.expect(function (res) {
         expect(res.status).toBe(200);
-        expect(res.body).toMatch(/bioguide_id\":\"J000294\"/);
+        expect(res.body).toMatch(/bioguide_id\":\"L000571\"/);
         expect(res.headers['content-type']).toMatch(/application\/json/);
       }).end(function (err) {
         if (err) {
@@ -28,6 +28,23 @@ describe('Server', function () {
         }
       });
     });
+
+    it('returns a 404 and throws an error when there is not a zipCode query param', function (done) {
+      this.response = request('http://127.0.0.1:' + this.port)
+        .get('/legislators');
+      this.response.expect(function (res) {
+        expect(res.status).toBe(200);
+        expect(res.body).toMatch(/You did not supply a zipCode query param/);
+        expect(res.headers['content-type']).toMatch(/application\/json/);
+      }).end(function (err) {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
+      });
+    });
+
   });
 
   describe('GET /', function () {
