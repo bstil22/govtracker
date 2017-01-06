@@ -14,7 +14,7 @@ const logger = new (winston.Logger)({
 const testLogger = new (winston.Logger)();
 
 const getLogger = function () {
-  if(process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV !== 'test') {
     return logger;
   } else {
     return testLogger;

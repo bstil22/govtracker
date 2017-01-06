@@ -18,7 +18,7 @@ describe('Server', function () {
         .get('/legislators?zipCode=82001');
       this.response.expect(function (res) {
         expect(res.status).toBe(200);
-        expect(res.body).toMatch(/bioguide_id\":\"L000571\"/);
+        expect(res.body).toMatch(/bioguide_id\":\"C001109\"/);
         expect(res.headers['content-type']).toMatch(/application\/json/);
       }).end(function (err) {
         if (err) {

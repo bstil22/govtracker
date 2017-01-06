@@ -25,9 +25,7 @@ function getDelegates (queryParams) {
       if (response.statusCode >= 400) {
         reject(new Error('Sunlight Labs is hosed'));
       }
-      else {
-        resolve(response.body);
-      }
+      resolve(response.body);
     }).catch(err => {
       reject(err);
     });
